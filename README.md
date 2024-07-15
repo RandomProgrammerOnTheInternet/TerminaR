@@ -1,6 +1,7 @@
 # TerminaR
 
 Terminal Renderer. STB-style single header library.
+As of 7/15/2024, 251 loc.
 
 Before including the library, define the implementation: ```#define TERMINAR_IMPL```
 
