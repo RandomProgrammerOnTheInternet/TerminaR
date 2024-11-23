@@ -2,7 +2,7 @@
 #define TERMINAR_IMPLEMENTATION
 #define trmR_screen_width 100
 #define trmR_screen_height 100
-#include "terminar.h"
+#include "../terminar.h"
 
 int main() {
 	// initialize screen with RGB color white
