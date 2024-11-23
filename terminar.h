@@ -60,37 +60,33 @@ typedef struct {
 
 trmR_pixel_t trmR_screen[trmR_screen_height][trmR_screen_width];
 
-void trmR_start_bg_color(u8, u8, u8);
-void trmR_start_fg_color(u8, u8, u8);
-void trmR_start_color(u8, u8, u8);
+static void trmR_start_bg_color(u8, u8, u8);
+static void trmR_start_fg_color(u8, u8, u8);
+static void trmR_start_color(u8, u8, u8);
 void trmR_init_scr(u8, u8, u8);
 void trmR_stpx(u16, u16, u8, u8, u8);
 void trmR_show_scr();
 void trmR_end();
-void trmR_lerp_rgb(f32, u8, u8, u8, u8, u8, u8, u8*, u8*, u8*);
-void trmR_draw_line_low(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
-void trmR_draw_line_high(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
+static void trmR_lerp_rgb(f32, u8, u8, u8, u8, u8, u8, u8*, u8*, u8*);
+static void trmR_draw_line_low(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
+static void trmR_draw_line_high(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
 void trmR_draw_line(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
 
-void trmR_start_bg_color(u8 r, u8 g, u8 b) {
+static void trmR_start_bg_color(u8 r, u8 g, u8 b) {
     printf("\x1b[48;2;%d;", r);
     printf("%d;", g);
     printf("%dm", b);
 }
 
-void trmR_start_fg_color(u8 r, u8 g, u8 b) {
+static void trmR_start_fg_color(u8 r, u8 g, u8 b) {
     printf("\x1b[38;2;%d;", r);
     printf("%d;", g);
     printf("%dm", b);
 }
 
-void trmR_start_color(u8 r, u8 g, u8 b) {
+static void trmR_start_color(u8 r, u8 g, u8 b) {
     trmR_start_bg_color(r, g, b);
     trmR_start_fg_color(r, g, b);
-}
-
-void trmR_temp_color(u8 r, u8 g, u8 b) {
-    /* todo, might not even do it */
 }
 
 void trmR_init_scr(u8 r, u8 g, u8 b) {
@@ -132,13 +128,13 @@ void trmR_end() {
     exit(0);
 }
 
-void trmR_lerp_rgb(f32 t, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2, u8 *sr, u8 *sg, u8 *sb) {
+static void trmR_lerp_rgb(f32 t, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2, u8 *sr, u8 *sg, u8 *sb) {
     *sr = (u8)floorf(((1.0 - t) * (f32)r1) + (t * (f32)r2));
     *sg = (u8)floorf(((1.0 - t) * (f32)g1) + (t * (f32)g2));
     *sb = (u8)floorf(((1.0 - t) * (f32)b1) + (t * (f32)b2));
 }
 
-int trmR_draw_line_low(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
+static void trmR_draw_line_low(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
     u8 sr;
     u8 sg;
     u8 sb;
@@ -167,11 +163,9 @@ int trmR_draw_line_low(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r
             D = D + 2 * dy;
         }
     }
-    
-    return 0;
 }
 
-int trmR_draw_line_high(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
+static void trmR_draw_line_high(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
     u8 sr;
     u8 sg;
     u8 sb;
@@ -199,11 +193,9 @@ int trmR_draw_line_high(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 
             D = D + 2 * dx;
         }
     }
-    
-    return 0;
 }
 
-int trmR_draw_line(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
+void trmR_draw_line(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
     if(abs(y2 - y1) < abs(x2 - x1)) {
         if(x1 > x2) {
             trmR_draw_line_low(y2, x2, y1, x1, r1, g1, b1, r2, g2, b2);
@@ -220,8 +212,6 @@ int trmR_draw_line(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u
             trmR_draw_line_high(y1, x1, y2, x2, r1, g1, b1, r2, g2, b2);
         }
     }
-    
-    return 0;
 }
 
 
