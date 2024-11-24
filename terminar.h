@@ -1,21 +1,17 @@
 #pragma once
 
-/*  ----------
+/*  
+ *  ----------
  *   TerminaR
  *  ----------
- *  
- *
- *  Notes:
- *  
- *  Coordinates are listed as (y,x) because arrays are weird
-*/
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <stdint.h>
 
-#ifdef TERMINAR_IMPLEMENTATION
+#ifdef TRMR_IMPL
 
 #ifndef trmR_set_default_color
     #define trmR_set_default_color trmR_start_color(255, 255, 255)
@@ -37,6 +33,7 @@
     #define trmR_pixel_value 'm'
 #endif /* trmR_pixel */
 
+// cry about it
 typedef int8_t i8;
 typedef int16_t i16;
 typedef int32_t i32;
@@ -58,7 +55,7 @@ typedef struct {
     u8 b;
 } trmR_pixel_t;
 
-trmR_pixel_t trmR_screen[trmR_screen_height][trmR_screen_width];
+trmR_pixel_t trmR_screen[trmR_screen_width][trmR_screen_height];
 
 static void trmR_start_bg_color(u8, u8, u8);
 static void trmR_start_fg_color(u8, u8, u8);
@@ -101,7 +98,7 @@ void trmR_init_scr(u8 r, u8 g, u8 b) {
     }
 }
 
-void trmR_stpx(u16 y, u16 x, u8 r, u8 g, u8 b) {
+void trmR_stpx(u16 x, u16 y, u8 r, u8 g, u8 b) {
     if(y > trmR_screen_height || x > trmR_screen_width) {
         printf("\x1b[38;2;255;255;255m \x1b[48;2;0;0;0m skill issue: you gotta set that pixel INSIDE the screen!\n");
         exit(1);
@@ -134,7 +131,7 @@ static void trmR_lerp_rgb(f32 t, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2, u8 *s
     *sb = (u8)floorf(((1.0 - t) * (f32)b1) + (t * (f32)b2));
 }
 
-static void trmR_draw_line_low(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
+static void trmR_draw_line_low(u16 x1, u16 y1, u16 x2, u16 y2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
     u8 sr;
     u8 sg;
     u8 sb;
@@ -165,7 +162,7 @@ static void trmR_draw_line_low(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 
     }
 }
 
-static void trmR_draw_line_high(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
+static void trmR_draw_line_high(u16 x1, u16 y1, u16 x2, u16 y2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
     u8 sr;
     u8 sg;
     u8 sb;
@@ -195,24 +192,24 @@ static void trmR_draw_line_high(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8
     }
 }
 
-void trmR_draw_line(u16 y1, u16 x1, u16 y2, u16 x2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
+void trmR_draw_line(u16 x1, u16 y1, u16 x2, u16 y2, u8 r1, u8 g1, u8 b1, u8 r2, u8 g2, u8 b2) {
     if(abs(y2 - y1) < abs(x2 - x1)) {
         if(x1 > x2) {
-            trmR_draw_line_low(y2, x2, y1, x1, r1, g1, b1, r2, g2, b2);
+            trmR_draw_line_low(x2, y2, x1, y1, r1, g1, b1, r2, g2, b2);
         }
         else {
-            trmR_draw_line_low(y1, x1, y2, x2, r1, g1, b1, r2, g2, b2);
+            trmR_draw_line_low(x1, y1, x2, y2, r1, g1, b1, r2, g2, b2);
         }
     }
     else {
         if(y1 > y2) {
-            trmR_draw_line_high(y2, x2, y1, x1, r1, g1, b1, r2, g2, b2);
+            trmR_draw_line_high(x2, y2, x1, y1, r1, g1, b1, r2, g2, b2);
         }
         else {
-            trmR_draw_line_high(y1, x1, y2, x2, r1, g1, b1, r2, g2, b2);
+            trmR_draw_line_high(x1, y1, x2, y2, r1, g1, b1, r2, g2, b2);
         }
     }
 }
 
 
-#endif /* TERMINAR_IMPLEMENTAION */
+#endif /* TRMR_IMPL */
