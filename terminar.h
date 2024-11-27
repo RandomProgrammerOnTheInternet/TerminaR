@@ -11,6 +11,18 @@
 #include <math.h>
 #include <stdint.h>
 
+static void trmR_start_bg_color(u8, u8, u8);
+static void trmR_start_fg_color(u8, u8, u8);
+static void trmR_start_color(u8, u8, u8);
+void trmR_init_scr(u8, u8, u8);
+void trmR_stpx(u16, u16, u8, u8, u8);
+void trmR_show_scr();
+void trmR_end();
+static void trmR_lerp_rgb(f32, u8, u8, u8, u8, u8, u8, u8*, u8*, u8*);
+static void trmR_draw_line_low(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
+static void trmR_draw_line_high(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
+void trmR_draw_line(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
+
 #ifdef TRMR_IMPL
 
 #ifndef trmR_set_default_color
@@ -56,18 +68,6 @@ typedef struct {
 } trmR_pixel_t;
 
 trmR_pixel_t trmR_screen[trmR_screen_width][trmR_screen_height];
-
-static void trmR_start_bg_color(u8, u8, u8);
-static void trmR_start_fg_color(u8, u8, u8);
-static void trmR_start_color(u8, u8, u8);
-void trmR_init_scr(u8, u8, u8);
-void trmR_stpx(u16, u16, u8, u8, u8);
-void trmR_show_scr();
-void trmR_end();
-static void trmR_lerp_rgb(f32, u8, u8, u8, u8, u8, u8, u8*, u8*, u8*);
-static void trmR_draw_line_low(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
-static void trmR_draw_line_high(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
-void trmR_draw_line(u16, u16, u16, u16, u8, u8, u8, u8, u8, u8);
 
 static void trmR_start_bg_color(u8 r, u8 g, u8 b) {
     printf("\x1b[48;2;%d;", r);
