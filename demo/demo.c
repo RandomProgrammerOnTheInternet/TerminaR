@@ -1,5 +1,5 @@
 #include <stdio.h>
-#define TERMINAR_IMPLEMENTATION
+#define TRMR_IMPL
 #define trmR_screen_width 100
 #define trmR_screen_height 100
 #include "../terminar.h"
